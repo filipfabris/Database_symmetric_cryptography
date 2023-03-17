@@ -1,0 +1,49 @@
+Kod iniciranja baze podataka korisnik unosi masterPassword
+Te se unosi polje init: [imaBazePodataka] koje je kriptirani temeljem deriviranog ključa
+
+Baza podataka je organizirana na sljedeći način:
+username#SALTusername=key
+
+Username je hashiran radi brže pretrage, username=key su kriptirani sa AES/GCM/NoPadding deriviranim ključem.
+
+Derivirani ključ je izrađen na temelju masterPassworda i salta koji je random generiran
+String username=key su kriptirani na temelju tog deriviranog kljuca, na pocetak tog stringa se doda salt kako bi
+se kasnije mogao rekonstruirati derivirani kljuc za dekriptiranje.
+Sve to se hesira sa hash funkcijom i sprema se u file baze podataka.
+
+
+Autentifikacija je postignuta korištenjem- SecretKey, SecretKeyFactory (PBKDF2WithHmacSHA256)
+Derivirani ključ dobivamo na temelju glavne lozinke te generiranoj tajni koja se izrađena na PBEKeySpec klasi koja koristi
+    salt i broj iteracija
+
+Na temlju tako dobivenog tajnog kljuca kriptiramo svaki redak unosa u bazu podataka
+Uz šifrat u redak baze podataka dodaje se inicijalizacijski vektor i salt za ponovnu rekonstrukciju kljuca
+Budući da se koristi i algoritam AES/GCM/NoPadding postignut je i integritet pomoću tagova
+
+Provjera da li se u sustavu nalazi neka vrijednost provodi se na sljedeci način
+>korisnik unosi lozinku i vrijednost koju trazi
+- alat potvrdi lozinku na temelju dekriptiranja prvog retka u bazi podataka
+- hesira se unos vrijednosti korisnika i trazi se taj hask kao pocetak svakog retka
+- kada se prodađe redak uklanaj se hash, dekriptira se šifrat pomoću lozinke i salta
+    koji ovako izgleda dekriptiran username=key
+- ponovno se uspoređuje hash vrijednosti koja se trazi sa hashom usernama kako bi se potvrdio integritet
+
+Šifrati su osigurani od napada dnevnika budući da šifrati nisu samo lozinke već su u formi username=key
+Integritet je osuguran zastavicama te također provjerom hasheva vrijednosti
+
+
+primjer:
+init abc123 filipdb
+init lozinka baza       //Izrada dvije baze
+use filipdb             //Odabir baze podataka
+put abc123 ff filip     //Mogu i ovako koristiti "put filipfdb abc123 ff filip"
+                        //No budući da koristimo use program zna koju bazu koristimo
+put abc123 ll leo
+put abc123 key vrijednost
+get abc123 ll           //Vraca leo
+get abc123 gg           //Ne postoji
+getall abc123           //Vraca sve vrijednosti
+delete abc123 ll         //Brise ll vrijednost
+get abc123 ll           //Ne postoji
+destroy abc123          //Brisanje bazu podataka
+destroy baza lozinka    //Brisanje druge stvorene baze podataka u primjeru
