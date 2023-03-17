@@ -38,6 +38,7 @@ public class HelpCommand implements ShellCommand{
 			
 			if(command == null) {
 				UtilitySharedCommand.commandNotExists(env, argumentsArray[0]);
+				return ShellStatus.CONTINUE;
 			}
 			
 			command.getCommandDescription().stream().forEach(s -> sb.append(s));
