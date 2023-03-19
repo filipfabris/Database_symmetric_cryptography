@@ -1,7 +1,7 @@
 package hr.fer.srs.commands;
 
 import hr.fer.srs.ShellExecutor;
-import hr.fer.srs.crypto.Crypto;
+import hr.fer.srs.cryptography.Crypto;
 import hr.fer.srs.status.OperationStatus;
 import hr.fer.srs.status.ShellStatus;
 import hr.fer.srs.strategy.*;

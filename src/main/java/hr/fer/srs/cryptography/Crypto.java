@@ -1,4 +1,4 @@
-package hr.fer.srs.crypto;
+package hr.fer.srs.cryptography;
 
 import hr.fer.srs.strategy.Environment;
 import hr.fer.srs.strategy.ShellIOException;
@@ -22,7 +22,6 @@ import java.util.List;
 public class Crypto {
 
     private final static int GCM_IV_LENGTH = 12;
-
 
     public static final int SALT_LENGTH = 16;
     private final static int AUTH_TAG = 128;

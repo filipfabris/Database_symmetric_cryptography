@@ -32,7 +32,7 @@ Provjera da li se u sustavu nalazi neka vrijednost provodi se na sljedeci način
 Integritet je osuguran zastavicama te također provjerom hasheva vrijednosti
 
 
-Razlog zašto padding nije potreban u AES/GCM/NoPaddingu je način na koji ovaj način rada funkcionira.
+Razlog zašto padding nije potreban u AES/GCM/NoPaddingu je zbog način rada:
     GCM (Galois/Counter Mode) način je rada koji kombinira način šifriranja brojača s množenjem polja Galois
     kako bi se osigurala povjerljivost i integritet. Koristi jedinstvenu vrijednost brojača za svaki blok
     otvorenog teksta koji je šifriran, a ta vrijednost brojača kombinira se s tajnim ključem i prolazi kroz
@@ -47,6 +47,7 @@ Budući da GCM već generira oznaku koja pruža autentifikaciju i integritet, ne
  kako bi se osigurala sigurnost. Ispuna se obično koristi u drugim načinima rada kako bi se osiguralo da je
  otvoreni tekst višekratnik veličine bloka šifre. Međutim, budući da GCM radi na bazi po bloku i ne zahtijeva
  da otvoreni tekst bude višekratnik veličine bloka, ispuna nije potrebna.
+- Potrebna je kod CBC (Cipher Block Chaining) ili kod ECB (Electronic Code Book)
 
 Budući da ne treba padding, otporno na ciphertext manipulation or chosen plaintext attacks, oracle attack
 
