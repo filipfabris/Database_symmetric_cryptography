@@ -32,6 +32,24 @@ Provjera da li se u sustavu nalazi neka vrijednost provodi se na sljedeci način
 Integritet je osuguran zastavicama te također provjerom hasheva vrijednosti
 
 
+Razlog zašto padding nije potreban u AES/GCM/NoPaddingu je način na koji ovaj način rada funkcionira.
+    GCM (Galois/Counter Mode) način je rada koji kombinira način šifriranja brojača s množenjem polja Galois
+    kako bi se osigurala povjerljivost i integritet. Koristi jedinstvenu vrijednost brojača za svaki blok
+    otvorenog teksta koji je šifriran, a ta vrijednost brojača kombinira se s tajnim ključem i prolazi kroz
+    AES algoritam za izradu bloka šifriranog teksta.
+
+Galoisovo množenje polja osigurava autentifikaciju generiranjem oznake koja se dodaje šifriranom tekstu.
+    Ova oznaka se generira pomoću istog tajnog ključa i vrijednosti brojača koji su korišteni za šifriranje
+    otvorenog teksta, kao i pridruženih podataka (ako postoje). Primatelj zatim ovjerava autentičnost oznake
+    kako bi se osigurao integritet šifriranog teksta i povezanih podataka.
+
+Budući da GCM već generira oznaku koja pruža autentifikaciju i integritet, nema potrebe za dodatnim punjenjem
+ kako bi se osigurala sigurnost. Ispuna se obično koristi u drugim načinima rada kako bi se osiguralo da je
+ otvoreni tekst višekratnik veličine bloka šifre. Međutim, budući da GCM radi na bazi po bloku i ne zahtijeva
+ da otvoreni tekst bude višekratnik veličine bloka, ispuna nije potrebna.
+
+Budući da ne treba padding, otporno na ciphertext manipulation or chosen plaintext attacks, oracle attack
+
 primjer:
 init abc123 filipdb
 init lozinka baza       //Izrada dvije baze
